@@ -8,24 +8,24 @@ import java.util.function.Supplier;
 /**
  * Created by raphael on 31/03/2017.
  */
-class Adapter<I, O> implements BiFunction<I, O, O> {
+public class Adapter<I, O> implements BiFunction<I, O, O> {
 
-    private final BiFunction<I, O, O> adapter;
+    private final BiFunction<I, O, O> delegate;
 
     public Adapter(BiFunction<I, O, O> adapter) {
-        this.adapter = adapter;
+        this.delegate = adapter;
     }
 
-    public static <I,O> Adapter<I,O> with(Class<I> input, Class<O> output) {
+    public static <I,O> Adapter<I,O> with() {
         return new Adapter<>((I i, O o) -> o);
     }
 
     public Adapter<I, O> adapt(BiFunction<I, O, O> then) {
         BiFunction<I, O, O> newBifunction = (I i, O o) -> {
-            O applied = adapter.apply(i, o);
+            O applied = delegate.apply(i, o);
             return then.apply(i, applied);
         };
-        return new Adapter(newBifunction);
+        return new Adapter<>(newBifunction);
     }
 
     public <V> Adapter<I, O> adapt(Function<I, V> getter, BiConsumer<O, V> setter) {
@@ -37,8 +37,9 @@ class Adapter<I, O> implements BiFunction<I, O, O> {
         return adapt((I i) -> getter.get(), setter);
     }
 
+    @Override
     public O apply(I input, O output) {
-        adapter.apply(input, output);
+        delegate.apply(input, output);
         return output;
     }
 

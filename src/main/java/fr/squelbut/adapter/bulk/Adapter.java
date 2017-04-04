@@ -16,6 +16,7 @@ public class Adapter<I, O> implements BiFunction<I, O, O> {
         this.transformers = transformers;
     }
 
+    @Override
     public O apply(I input, O output) {
         transformers.forEach(t -> t.accept(input, output));
         return output;
@@ -26,7 +27,7 @@ public class Adapter<I, O> implements BiFunction<I, O, O> {
     }
 
 
-    public static <I, O> AdapterBuilder<I, O> newAdapter(Class<I> i, Class<O> o) {
-        return new AdapterBuilder();
+    public static <I, O> AdapterBuilder<I, O> newAdapter() {
+        return new AdapterBuilder<>();
     }
 }
