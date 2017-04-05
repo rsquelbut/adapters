@@ -12,20 +12,20 @@ import java.util.function.Supplier;
  */
 public class ListAdapter<I, O> implements BiFunction<I, O, O> {
 
-    private final List<BiFunction<I, O, O>> transformers = new ArrayList<>();
+    private final List<BiConsumer<I, O>> transformers = new ArrayList<>();
 
 
     public static <I, O> ListAdapter<I, O> with(Class<I> input, Class<O> output) {
         return new ListAdapter<>();
     }
 
-    public ListAdapter<I, O> adapt(BiFunction<I, O, O> then) {
+    public ListAdapter<I, O> adapt(BiConsumer<I, O> then) {
         transformers.add(then);
         return this;
     }
 
     public <V> ListAdapter<I, O> adapt(Function<I, V> getter, BiConsumer<O, V> setter) {
-        BiFunction<I, O, O> newBifunction = compose(getter, setter);
+        BiConsumer<I, O> newBifunction = compose(getter, setter);
         return adapt(newBifunction);
     }
 
@@ -35,7 +35,7 @@ public class ListAdapter<I, O> implements BiFunction<I, O, O> {
 
     @Override
     public O apply(I input, O output) {
-        transformers.forEach(t -> t.apply(input, output));
+        transformers.forEach(t -> t.accept(input, output));
         return output;
     }
 
@@ -43,11 +43,8 @@ public class ListAdapter<I, O> implements BiFunction<I, O, O> {
         return apply(input, output.get());
     }
 
-    private <V> BiFunction<I, O, O> compose(Function<I, V> getter, BiConsumer<O, V> setter) {
-        return (I i, O o) -> {
-            setter.accept(o, getter.apply(i));
-            return o;
-        };
+    private <V> BiConsumer<I, O> compose(Function<I, V> getter, BiConsumer<O, V> setter) {
+        return (I i, O o) -> setter.accept(o, getter.apply(i));
     }
 
 }
