@@ -1,6 +1,5 @@
 package fr.squelbut.adapter;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,11 +11,13 @@ public class TestA {
     private List<Object> list;
     private boolean bool;
     private String[] array;
+    private FieldA field;
 
-    public TestA(List<Object> titi, boolean b, String[] strings) {
+    public TestA(List<Object> titi, boolean b, String[] strings, FieldA field) {
         this.array=strings;
         this.bool=b;
         this.list=titi;
+        this.field=field;
     }
 
     public List<Object> getList() {
@@ -41,5 +42,13 @@ public class TestA {
 
     public void setArray(String[] array) {
         this.array = array;
+    }
+
+    public FieldA getField() {
+        return field;
+    }
+
+    public void setField(FieldA field) {
+        this.field = field;
     }
 }

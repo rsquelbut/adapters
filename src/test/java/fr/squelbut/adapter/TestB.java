@@ -10,6 +10,7 @@ public class TestB {
     private List<Object> liste;
     private boolean booleen;
     private String[] tableau;
+    private FieldB field;
     private Integer extra;
 
     public List<Object> getListe() {
@@ -42,5 +43,13 @@ public class TestB {
 
     public void setExtra(Integer extra) {
         this.extra = extra;
+    }
+
+    public FieldB getField() {
+        return field;
+    }
+
+    public void setField(FieldB field) {
+        this.field = field;
     }
 }
