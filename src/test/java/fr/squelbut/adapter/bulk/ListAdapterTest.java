@@ -32,7 +32,8 @@ public class ListAdapterTest {
                                       FieldB::setValue);
 
 
-        Function<TestA, FieldB> fieldA2FieldB = a -> fieldComposedAdapter.apply(a.getField(), FieldB::new);
+        Function<TestA, FieldB> fieldA2FieldB = a -> fieldComposedAdapter
+                .apply(a.getField(), FieldB::new);
         ListAdapter<TestA, TestB> adapter =
                 ListAdapter.with(TestA.class, TestB.class)
                                .adapt(TestA::getList, TestB::setListe)
@@ -51,8 +52,9 @@ public class ListAdapterTest {
                                        .isEqualTo(expected.getArray());
         assertThat(actual.isBooleen()).isEqualTo(expected.isBool());
         assertThat(actual.getExtra()).isEqualTo(5);
-        assertThat(actual.getField().getUuid()).isEqualTo(expected.getField().getUuid().toString());
-        assertThat(actual.getField().getValue()).isEqualTo(expected.getField().getValue().toString());
-
+        assertThat(actual.getField().getUuid())
+                .isEqualTo(expected.getField().getUuid().toString());
+        assertThat(actual.getField().getValue())
+                .isEqualTo(expected.getField().getValue().toString());
     }
 }

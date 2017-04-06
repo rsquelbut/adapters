@@ -23,7 +23,7 @@ public class ComposedAdapterTest {
                                    new String[]{"A", "B"},
                                    field);
 
-        ComposedAdapter<FieldA, FieldB> fieldComposedAdapter =
+        Adapter<FieldA, FieldB> fieldComposedAdapter =
                 ComposedAdapter.with(FieldA.class, FieldB.class)
                                .adapt(f -> f.getUuid().toString(),
                                       FieldB::setUuid)
@@ -31,8 +31,9 @@ public class ComposedAdapterTest {
                                       FieldB::setValue);
 
 
-        Function<TestA, FieldB> fieldA2FieldB = a -> fieldComposedAdapter.apply(a.getField(), FieldB::new);
-        ComposedAdapter<TestA, TestB> adapter =
+        Function<TestA, FieldB> fieldA2FieldB = a -> fieldComposedAdapter
+                .apply(a.getField(), FieldB::new);
+        Adapter<TestA, TestB> adapter =
                 ComposedAdapter.with(TestA.class, TestB.class)
                                .adapt(TestA::getList, TestB::setListe)
                                .adapt(TestA::isBool, TestB::setBooleen)
@@ -50,8 +51,10 @@ public class ComposedAdapterTest {
                                        .isEqualTo(expected.getArray());
         assertThat(actual.isBooleen()).isEqualTo(expected.isBool());
         assertThat(actual.getExtra()).isEqualTo(5);
-        assertThat(actual.getField().getUuid()).isEqualTo(expected.getField().getUuid().toString());
-        assertThat(actual.getField().getValue()).isEqualTo(expected.getField().getValue().toString());
+        assertThat(actual.getField().getUuid())
+                .isEqualTo(expected.getField().getUuid().toString());
+        assertThat(actual.getField().getValue())
+                .isEqualTo(expected.getField().getValue().toString());
 
     }
 
