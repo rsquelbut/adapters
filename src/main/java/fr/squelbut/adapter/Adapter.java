@@ -32,4 +32,15 @@ public interface Adapter<I, O> extends BiFunction<I, O, O> {
         Function<I, V> function = (I input) -> getter.get();
         return adapt(function, setter);
     }
+
+    default <I2> Adapter<I2, O> changeInput(Function<I2, I> toOriginalInput) {
+        return (I2 changedInput, O output) -> {
+            I originalInput = toOriginalInput.apply(changedInput);
+            return this.apply(originalInput, output);
+        };
+    }
+
+    default Function<I, O> toFunction(Supplier<O> output) {
+        return (I i) -> apply(i, output.get());
+    }
 }

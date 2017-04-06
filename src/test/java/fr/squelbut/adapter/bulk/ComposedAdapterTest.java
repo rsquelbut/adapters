@@ -23,25 +23,26 @@ public class ComposedAdapterTest {
                                    new String[]{"A", "B"},
                                    field);
 
-        Adapter<FieldA, FieldB> fieldComposedAdapter =
-                ComposedAdapter.with(FieldA.class, FieldB.class)
-                               .adapt(f -> f.getUuid().toString(),
-                                      FieldB::setUuid)
-                               .adapt(f -> f.getValue().name(),
-                                      FieldB::setValue);
+        Function<TestA, FieldB> testA2FieldB = ComposedAdapter
+                .with(FieldA.class, FieldB.class)
+                .adapt(f -> f.getUuid().toString(),
+                       FieldB::setUuid)
+                .adapt(f -> f.getValue().name(),
+                       FieldB::setValue)
+                .changeInput(TestA::getField)
+                .toFunction(FieldB::new);
 
-
-        Function<TestA, FieldB> fieldA2FieldB = a -> fieldComposedAdapter
-                .apply(a.getField(), FieldB::new);
         Adapter<TestA, TestB> adapter =
                 ComposedAdapter.with(TestA.class, TestB.class)
                                .adapt(TestA::getList, TestB::setListe)
                                .adapt(TestA::isBool, TestB::setBooleen)
                                .adapt(TestA::getArray, TestB::setTableau)
-                               .adapt(fieldA2FieldB, TestB::setField)
+                               .adapt(testA2FieldB, TestB::setField)
                                .adapt(() -> 5, TestB::setExtra);
 
-        TestB actual = adapter.apply(expected, TestB::new);
+
+        TestB actual1 = new TestB();
+        TestB actual = adapter.apply(expected, actual1);
 
         assertThat(actual.getListe()).isNotNull()
                                      .isNotEmpty()
