@@ -17,12 +17,22 @@ public interface Adapter<I, O> extends BiFunction<I, O, O> {
         return apply(input, output.get());
     }
 
-    default Adapter<I, O> adapt(Adapter<I, O> then) {
+    default Adapter<I, O> then(Adapter<I, O> then) {
         return (I i, O o) -> then.apply(i, this.apply(i, o));
     }
 
+    default Adapter<I, O> before(Adapter<I, O> then) {
+        return (I i, O o) -> this.apply(i, then.apply(i, o));
+    }
+
+    default <C, V> BiAdapter<I, C, O> then(BiFunction<I, C, V> getter,
+                                           BiConsumer<O, V> setter) {
+        BiAdapter<I, C, O> biAdapter = (I i, C c, O o) -> o;
+        return biAdapter.before(this);
+    }
+
     default <V> Adapter<I, O> adapt(Function<I, V> getter, BiConsumer<O, V> setter) {
-        return adapt((I i, O o) -> {
+        return then((I i, O o) -> {
             setter.accept(o, getter.apply(i));
             return o;
         });
