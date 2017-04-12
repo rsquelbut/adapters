@@ -10,11 +10,13 @@ import static java.util.Arrays.asList;
  */
 public class Datas {
 
+    public static final Random RANDOM = new Random();
+
     public static TestA testA(){
         UUID uuid = UUID.randomUUID();
         FieldA field = new FieldA(uuid, Value.VALEUR2);
         return new TestA(asList(1, "titi"),
-                         new Random().nextBoolean(),
+                         RANDOM.nextBoolean(),
                          new String[]{"A", "B"},
                          field);
     }

@@ -3,7 +3,11 @@ package fr.squelbut.adapter;
 /**
  * Created by raphael on 12/04/2017.
  */
-public class Adapters {
+public final class Adapters {
+
+    private Adapters() {
+        throw new Error("No instance");
+    }
 
     public static <I, O> Adapter<I, O> from(Class<I> input, Class<O> output) {
         return (I i, O o) -> o;

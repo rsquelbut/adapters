@@ -1,5 +1,6 @@
 package fr.squelbut.adapter;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,11 +31,14 @@ public class TestB {
     }
 
     public String[] getTableau() {
-        return tableau;
+        return Arrays.copyOf(tableau, tableau.length);
     }
 
     public void setTableau(String[] tableau) {
-        this.tableau = tableau;
+        if (tableau == null) {
+            return;
+        }
+        this.tableau = Arrays.copyOf(tableau, tableau.length);
     }
 
     public Integer getExtra() {

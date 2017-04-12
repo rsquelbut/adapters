@@ -1,5 +1,6 @@
 package fr.squelbut.adapter;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public class TestA {
     private FieldA field;
 
     public TestA(List<Object> titi, boolean b, String[] strings, FieldA field) {
-        this.array=strings;
+        setArray(strings);
         this.bool=b;
         this.list=titi;
         this.field=field;
@@ -37,11 +38,14 @@ public class TestA {
     }
 
     public String[] getArray() {
-        return array;
+        return Arrays.copyOf(array, array.length);
     }
 
     public void setArray(String[] array) {
-        this.array = array;
+        if (array == null) {
+            return;
+        }
+        this.array = Arrays.copyOf(array, array.length);
     }
 
     public FieldA getField() {
